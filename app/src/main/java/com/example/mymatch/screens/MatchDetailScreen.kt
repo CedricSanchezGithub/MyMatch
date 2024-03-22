@@ -1,11 +1,14 @@
 package com.example.mymatch.screens
 
+
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.content.MediaType.Companion.Text
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +45,10 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.mymatch.R
+import com.example.mymatch.beans.MatchBean
 import com.example.mymatch.beans.PictureBean
+import com.example.mymatch.beans.matchList
+
 import com.example.mymatch.beans.pictureList
 import com.example.mymatch.ui.theme.MyMatchTheme
 import com.example.mymatch.viewmodel.MainViewModel
@@ -52,27 +59,38 @@ import com.google.ai.client.generativeai.type.content
 @Preview(showBackground = true, showSystemUi = true)
 @Preview(showBackground = true, showSystemUi = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun SearchScreenPreview() {
+fun MatchDetailPreview() {
     MyMatchTheme {
         Surface() {
 
             val mainViewModel: MainViewModel = viewModel()
-            mainViewModel.myList.addAll(pictureList)
+            mainViewModel.myList2.addAll(matchList)
             mainViewModel.searchText.value = "BC"
             mainViewModel.errorMessage.value = "Un message d'erreur"
             mainViewModel.runInProgress.value = true
 
-            SearchScreen(mainViewModel = mainViewModel)
+           // MatchDetail(mainViewModel = mainViewModel)
+            Column {
+                Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
+
+                teamA(modifier = Modifier.background(Color.LightGray), data = matchList[0])
+                Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
+                versus(modifier = Modifier.background(Color.White))
+                Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
+
+                teamB(modifier = Modifier.background(Color.LightGray), data = matchList[1])
+            }
+
         }
     }
 }
 
 //Composable représentant l'ensemble de l'écran
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
-fun SearchScreen(
+fun MatchDetail(
     navHostController: NavHostController? = null,
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
 ) {
     //Couleur à retirer lors de l'utilisation des thèmes de couleur
     Column(modifier = Modifier.background(Color.LightGray)) {
@@ -86,24 +104,12 @@ fun SearchScreen(
 
         )
 
-        Spacer(modifier = Modifier.height(16.dp)) // Ajoute un espace de 16dp entre le titre et la colonne
+        Row(modifier = Modifier.background(Color.LightGray)){
+            MatchGlobal(data = matchList[0])
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.weight(1f)
-        ) {
-
-
-            //
-            val filterList =
-                mainViewModel.myList //.filter { it.title.contains(mainViewModel.searchText.value, ignoreCase = true) }
-
-            items(filterList.size) {
-                PictureRowItem(data = filterList[it],
-                    onPictureClick = {
-                    })
-            }
         }
+
+        Spacer(modifier = Modifier.height(16.dp)) // Ajoute un espace de 16dp entre le titre et la colonne
 
         Row {
             Button(
@@ -116,7 +122,7 @@ fun SearchScreen(
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Actualiser la liste")
+                Text("Ajouter +1 a Equipe A")
             }
 
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
@@ -131,7 +137,7 @@ fun SearchScreen(
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Créer un match")
+                Text("Ajouter +1 a Equipe B")
             }
         }
 
@@ -140,7 +146,7 @@ fun SearchScreen(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun PictureRowItem(modifier: Modifier = Modifier, data: PictureBean, onPictureClick: () -> Unit) {
+fun MatchGlobal(modifier: Modifier = Modifier, data: MatchBean) {
 
     Row(
         modifier = modifier
@@ -148,7 +154,7 @@ fun PictureRowItem(modifier: Modifier = Modifier, data: PictureBean, onPictureCl
             .background(Color.White)
     ) {
 
-
+    // Equipe A 
         Column(
             Modifier
                 .padding(8.dp)
@@ -157,7 +163,7 @@ fun PictureRowItem(modifier: Modifier = Modifier, data: PictureBean, onPictureCl
 
             // Titre
             Text(
-                text = data.title,
+                text = data.title_A,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = Color.Black,
@@ -177,7 +183,7 @@ fun PictureRowItem(modifier: Modifier = Modifier, data: PictureBean, onPictureCl
                 )
                 Spacer(modifier = Modifier.width(8.dp)) // Espace entre le logo et le texte
                 Text(
-                    text = "${data.Equipe_A} ${data.Score_EquipeA}",
+                    text = "${data.title_A} ${data.Score_Equipe1}",
                     fontSize = 14.sp,
                     color = Color.Blue,
                     modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
@@ -198,7 +204,7 @@ fun PictureRowItem(modifier: Modifier = Modifier, data: PictureBean, onPictureCl
                 )
                 Spacer(modifier = Modifier.width(8.dp)) // Espace entre le logo et le texte
                 Text(
-                    text = "${data.Equipe_B} ${data.Score_EquipeB}",
+                    text = "${data.title_A} ${data.Score_Equipe2}",
                     fontSize = 14.sp,
                     color = Color.Blue,
                     modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
@@ -211,5 +217,115 @@ fun PictureRowItem(modifier: Modifier = Modifier, data: PictureBean, onPictureCl
 
 
 
+@Composable
+fun teamA(modifier: Modifier, data :MatchBean){
+Column(modifier = Modifier.background(Color.LightGray)) {
+
+    Spacer(modifier = Modifier.height(30.dp)) // Espace entre le haut de la colonne et la première rangée
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.psg), // Remplacez R.drawable.logo_equipe_a par la ressource correspondant au logo de l'équipe A
+            contentDescription = "Logo équipe A",
+            modifier = Modifier.size(80.dp) // Taille du logo
+        )
+        Text(
+            text = data.title_A,
+            fontSize = 25.sp,
+            color = Color.Black,
+            modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
+        )
+    }
+    Row {
+        Spacer(modifier = Modifier.width(80.dp)) // Espace à gauche de la deuxième rangée
+
+        Text(
+            text = "Derniers résultats = ${data.win}" ,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Left,
+            color = Color.Black,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+}
 
 
+@Composable
+fun teamB(modifier: Modifier, data :MatchBean) {
+    Column(modifier = Modifier.background(Color.LightGray)) {
+
+        Spacer(modifier = Modifier.height(30.dp)) // Espace entre le haut de la colonne et la première rangée
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.hblm), // Remplacez R.drawable.logo_equipe_a par la ressource correspondant au logo de l'équipe A
+                contentDescription = "Logo équipe A",
+                modifier = Modifier.size(80.dp) // Taille du logo
+            )
+            Text(
+                text = data.title_A,
+                fontSize = 25.sp,
+                color = Color.Black,
+                modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
+            )
+        }
+        Row {
+            Spacer(modifier = Modifier.width(80.dp)) // Espace à gauche de la deuxième rangée
+
+            Text(
+                text = "Derniers résultats = ${data.win}",
+                fontSize = 20.sp,
+                textAlign = TextAlign.Left,
+                color = Color.Black,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+fun versus(modifier: Modifier) {
+    Column(modifier = Modifier.background(Color.White)) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Case gauche
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .background(Color.White)
+                    .border(width = 1.dp, color = Color.Black)
+                    .padding(end = 10.dp)
+            )
+
+            // Texte "VS"
+            Text(
+                text = "VS",
+                fontStyle = FontStyle.Italic,
+                textAlign = TextAlign.Center,
+                fontSize = 35.sp,
+                color = Color.Black,
+                modifier = Modifier.padding(horizontal = 50.dp) // Ajout de marges horizontales autour du texte
+            )
+
+            // Case droite
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .background(Color.White)
+                    .border(width = 1.dp, color = Color.Black)
+                    .padding(start = 10.dp)
+            )
+        }
+    }
+}

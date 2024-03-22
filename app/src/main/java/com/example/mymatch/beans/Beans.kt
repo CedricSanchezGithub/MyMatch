@@ -25,3 +25,20 @@ val pictureList = arrayListOf(
     PictureBean(3, "https://picsum.photos/202", "Match 3", Equipe_A, Equipe_B, Score_EquipeA, Score_EquipeB),
     PictureBean(4, "https://picsum.photos/203", "Match 4", Equipe_A, Equipe_B, Score_EquipeA, Score_EquipeB)
 )
+
+data class MatchBean(
+    val id : Int,
+    val title_A : String,
+    val win : String,
+    val Score_Equipe1: String,
+    val Score_Equipe2: String,
+    val logo : String,
+
+)
+
+const val Score_Equipe1 = ""
+const val Score_Equipe2 = ""
+val matchList = arrayListOf(
+    MatchBean(1, " Paris-Saint-Germain ", " V D V D V ", Score_Equipe1, Score_Equipe2, "Logo"),
+    MatchBean(2, " HBLM "," D D D D D ", Score_Equipe1, Score_Equipe2, "Logo2")
+)

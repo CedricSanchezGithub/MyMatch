@@ -66,4 +66,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    //Permet à JAVA de se connecter à une base SQL
+    runtimeOnly("com.mysql:mysql-connector-j")
+
+//JPA Framework Java qui génère du SQL
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+//Pour utiliser avec Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 }

@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mymatch.beans.AllMatchBean
 import com.example.mymatch.beans.MatchBean
-import com.example.mymatch.beans.PictureBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class MainViewModel : ViewModel() {
 
     val searchText = mutableStateOf("")
-    val myList = mutableStateListOf<PictureBean>()
+    val myList = mutableStateListOf<AllMatchBean>()
     val runInProgress = mutableStateOf(false)
     val errorMessage = mutableStateOf("")
 

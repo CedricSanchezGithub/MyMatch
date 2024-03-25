@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
@@ -72,6 +73,19 @@ fun MatchDetailPreview() {
            // MatchDetail(mainViewModel = mainViewModel)
             Column {
                 Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = " My Match ",
+                        fontSize = 30.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.Blue,
+                        modifier = Modifier.fillMaxWidth()
+
+                    )
+                }
+                Spacer(modifier = Modifier.height(25.dp)) // Ajout d'un espace vertical entre les équipes A et B
 
                 teamA(modifier = Modifier.background(Color.LightGray), data = matchList[0])
                 Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
@@ -154,7 +168,7 @@ fun MatchGlobal(modifier: Modifier = Modifier, data: MatchBean) {
             .background(Color.White)
     ) {
 
-    // Equipe A 
+    // Equipe A
         Column(
             Modifier
                 .padding(8.dp)
@@ -221,7 +235,8 @@ fun MatchGlobal(modifier: Modifier = Modifier, data: MatchBean) {
 fun teamA(modifier: Modifier, data :MatchBean){
 Column(modifier = Modifier.background(Color.LightGray)) {
 
-    Spacer(modifier = Modifier.height(30.dp)) // Espace entre le haut de la colonne et la première rangée
+
+    Spacer(modifier = Modifier.height(15.dp)) // Espace entre le haut de la colonne et la première rangée
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -258,22 +273,27 @@ Column(modifier = Modifier.background(Color.LightGray)) {
 fun teamB(modifier: Modifier, data :MatchBean) {
     Column(modifier = Modifier.background(Color.LightGray)) {
 
-        Spacer(modifier = Modifier.height(30.dp)) // Espace entre le haut de la colonne et la première rangée
+        Spacer(modifier = Modifier.height(15.dp)) // Espace entre le haut de la colonne et la première rangée
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.End // Centrage horizontal du contenu
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.hblm), // Remplacez R.drawable.logo_equipe_a par la ressource correspondant au logo de l'équipe A
-                contentDescription = "Logo équipe A",
-                modifier = Modifier.size(80.dp) // Taille du logo
-            )
+
             Text(
-                text = data.title_A,
+
+                text = "                          " + data.title_A,
                 fontSize = 25.sp,
                 color = Color.Black,
-                modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
+                modifier = Modifier.weight(1f)
+
+
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.hblm), // Remplacez R.drawable.logo_equipe_a par la ressource correspondant au logo de l'équipe A
+                contentDescription = "Logo équipe B",
+                modifier = Modifier.size(80.dp) // Taille du logo
             )
         }
         Row {
@@ -327,5 +347,46 @@ fun versus(modifier: Modifier) {
                     .padding(start = 10.dp)
             )
         }
+
+        Spacer(modifier = Modifier.height(10.dp)) // Espace entre le haut de la colonne et la première rangée
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically) {
+            Button(
+                onClick = { },
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                modifier = Modifier.padding(start = 42.dp)
+
+            )
+            {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Localized description",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Text("1 Point A")
+            }
+            Spacer(modifier = Modifier.width(30.dp)) // Espace à gauche de la deuxième rangée
+
+
+            Button(
+                onClick = { },
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                modifier = Modifier.padding(start = 42.dp)
+
+            )
+            {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Localized description",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Text("1 Point B")
+            }
+
+        }
+
+
     }
 }

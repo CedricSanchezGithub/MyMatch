@@ -25,7 +25,6 @@ import androidx.navigation.NavHostController
 import com.example.mymatch.beans.matchList
 
 import com.example.mymatch.component.teamA
-import com.example.mymatch.component.teamB
 import com.example.mymatch.component.versus
 import com.example.mymatch.ui.theme.MyMatchTheme
 import com.example.mymatch.viewmodel.MyMatchViewModel
@@ -82,7 +81,7 @@ fun MatchDetailScreen(
                 Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
                 versus()
                 Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
-                teamB(data = matchList[1])
+
             }
 
         }

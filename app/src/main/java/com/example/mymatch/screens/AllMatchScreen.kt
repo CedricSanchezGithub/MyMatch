@@ -20,13 +20,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -67,11 +73,13 @@ fun AllMatchScreen(
     navHostController: NavHostController? = null,
     myMatchViewModel: MyMatchViewModel
 ) {
+
     //Couleur à retirer lors de l'utilisation des thèmes de couleur
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Spacer(modifier = Modifier.width(50.dp))
 
             // Image à gauche de l'écran
@@ -136,23 +144,77 @@ fun AllMatchScreen(
                 }
 
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                var equipe1Name by remember { mutableStateOf("") }
+                var equipe2Name by remember { mutableStateOf("") }
+                val dialogShown = remember { mutableStateOf(false) }
 
-                Button(
-                    onClick = { myMatchViewModel.loadData() },
-                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                ) {
-                    Icon(
-                        Icons.Filled.Send,
-                        contentDescription = "Localized description",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                if (dialogShown.value) {
+                    AlertDialog(
+                        onDismissRequest = {
+                            dialogShown.value = false
+                        },
+                        title = { Text(text = "Créer un match") },
+                        text = {
+                            Column {
+                                OutlinedTextField(
+                                    value = equipe1Name,
+                                    onValueChange = { equipe1Name = it },
+                                    label = { Text("Nom de l'équipe 1") }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                OutlinedTextField(
+                                    value = equipe2Name,
+                                    onValueChange = { equipe2Name = it },
+                                    label = { Text("Nom de l'équipe 2") }
+                                )
+                            }
+                        },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    myMatchViewModel.createMatch(equipe1, equipe2)
+                                    dialogShown.value = false
+                                }
+                            ) {
+                                Text("Créer")
+                            }
+                        },
+                        dismissButton = {
+                            Button(
+                                onClick = { dialogShown.value = false }
+                            ) {
+                                Text("Annuler")
+                            }
+                        }
                     )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Créer un match")
                 }
+
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row {
+                        // ...
+
+                        Button(
+                            onClick = { dialogShown.value = true },
+                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                        ) {
+                            Icon(
+                                Icons.Filled.Send,
+                                contentDescription = "Localized description",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text("Créer un match")
+                        }
+                    }
+                }
+            }
             }
         }
     }
-}
+
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -168,8 +230,6 @@ fun PictureRowItem(
             .height(110.dp)
             .background(Color.White)
             .clickable(onClick = onPictureClick)
-
-
     ) {
 
 
@@ -194,46 +254,21 @@ fun PictureRowItem(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.psg), // Remplacez R.drawable.logo_equipe_a par la ressource correspondant au logo de l'équipe A
-                    contentDescription = "Logo équipe A",
-                    modifier = Modifier.size(70.dp) // Taille du logo
-                )
+
                 Spacer(modifier = Modifier.width(15.dp)) // Espace entre le logo et le texte
                 Text(
-                    text = buildAnnotatedString {
-                        append(data.equipe1)
-                        withStyle(style = SpanStyle(color = Color.Red)) {
-                            append("${data.score_equipe} ")
-                        }
-
-                    },
+                    text = data.equipe1,
                     fontSize = 20.sp,
                     color = Color.Blue,
                     modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
 
                 )
-
-
-
                 Spacer(modifier = Modifier.width(15.dp)) // Espace entre le logo et le texte
-
                 Text(
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Color.Red)) {
-                            append("${data.score_equipe2} ")
-                        }
-                        append(data.equipe2)
-                    },
+                    text = data.equipe2,
                     fontSize = 20.sp,
                     color = Color.Blue,
                     modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
-                )
-
-                Image(
-                    painter = painterResource(id = R.drawable.hblm), // Remplacez R.drawable.paris_saint_germain_logo par la référence à votre ressource d'image
-                    contentDescription = "Logo Paris Saint-Germain",
-                    modifier = Modifier.size(70.dp) // Taille du logo
                 )
             }
         }

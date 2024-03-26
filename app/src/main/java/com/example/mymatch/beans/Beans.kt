@@ -13,7 +13,7 @@ data class MatchBean(
     var id:Long? = null,
     var date: Long? = null,
     var equipe1: String = "Equipe 1",
-    var equipe2: String? = "Equipe 2",
+    var equipe2: String = "Equipe 2",
     var score_equipe: Int? = 0,
     var score_equipe2: Int? = 0,
     var status: Boolean = false)

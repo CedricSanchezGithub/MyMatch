@@ -26,8 +26,6 @@ class MyMatchViewModel : ViewModel() {
         myList2.addAll(matchList)
 
 
-
-
         //Une tache en cours
         runInProgress.value = true
         errorMessage.value = ""

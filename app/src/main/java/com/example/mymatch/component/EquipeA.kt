@@ -44,14 +44,14 @@ fun teamA(data : MatchBean){
             )
             Spacer(modifier = Modifier.width(15.dp)) // Espace entre le haut de la colonne et la première rangée
             Text(
-                text = data.title_A,
+                text = "text",
                 fontSize = 30.sp,
                 color = Color.Black,
                 modifier = Modifier.weight(1f)
             )
 
             Text(
-                text = data.win,
+                text = "text",
                 textAlign = TextAlign.End,
                 fontSize = 20.sp,
                 color = Color.Black,

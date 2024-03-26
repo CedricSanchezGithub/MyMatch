@@ -45,7 +45,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.mymatch.R
 import com.example.mymatch.Routes
 import com.example.mymatch.beans.MatchBean
-import com.example.mymatch.beans.matchList
 import com.example.mymatch.ui.theme.MyMatchTheme
 import com.example.mymatch.viewmodel.MyMatchViewModel
 
@@ -57,9 +56,7 @@ import com.example.mymatch.viewmodel.MyMatchViewModel
 fun AllMatchScreenPreview() {
     MyMatchTheme {
         Surface() {
-            val myMatchViewModel: MyMatchViewModel = viewModel()
-            myMatchViewModel.myList2.addAll(matchList)
-            AllMatchScreen(myMatchViewModel = myMatchViewModel)
+
         }
     }
 }
@@ -184,7 +181,7 @@ fun PictureRowItem(
 
             // Titre
             Text(
-                text = data.title_A,
+                text = "data.title_A",
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = Color.Black,
@@ -205,9 +202,9 @@ fun PictureRowItem(
                 Spacer(modifier = Modifier.width(15.dp)) // Espace entre le logo et le texte
                 Text(
                     text = buildAnnotatedString {
-                        append(data.title_A)
+                        append(data.equipe1)
                         withStyle(style = SpanStyle(color = Color.Red)) {
-                            append("${data.Score_Equipe1} ")
+                            append("${data.score_equipe} ")
                         }
 
                     },
@@ -224,9 +221,9 @@ fun PictureRowItem(
                 Text(
                     text = buildAnnotatedString {
                         withStyle(style = SpanStyle(color = Color.Red)) {
-                            append("${data.Score_Equipe2} ")
+                            append("${data.score_equipe2} ")
                         }
-                        append(data.title_A)
+                        append(data.equipe2)
                     },
                     fontSize = 20.sp,
                     color = Color.Blue,

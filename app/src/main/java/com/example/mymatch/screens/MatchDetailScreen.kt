@@ -38,41 +38,7 @@ import com.example.mymatch.viewmodel.MyMatchViewModel
 fun MatchDetailPreview() {
     MyMatchTheme {
         Surface {
-
-            val myMatchViewModel: MyMatchViewModel = viewModel()
-            myMatchViewModel.myList2.addAll(matchList)
-            Column(
-                modifier = Modifier
-                    // Couleur
-                    .background(MaterialTheme.colorScheme.primary)
-                    // Taille complète
-                    .fillMaxSize()
-            )
-            {
-
-
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = " My Match ",
-                        fontSize = 30.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color.Black,
-                        modifier = Modifier.fillMaxWidth()
-
-                    )
-                }
-                Spacer(modifier = Modifier.height(25.dp)) // Ajout d'un espace vertical entre les équipes A et B
-                teamA(data = matchList[0])
-                Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
-                versus()
-                Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
-                teamB(data = matchList[1])
-            }
-
+            MatchDetailScreen(myMatchViewModel = MyMatchViewModel())
         }
     }
 }
@@ -84,7 +50,8 @@ fun MatchDetailPreview() {
 @Composable
 fun MatchDetailScreen(
     navHostController: NavHostController? = null,
-    myMatchViewModel: MyMatchViewModel) {
+    myMatchViewModel: MyMatchViewModel
+) {
 
             Column(
                 modifier = Modifier

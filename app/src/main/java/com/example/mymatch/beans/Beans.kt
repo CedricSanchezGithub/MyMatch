@@ -10,19 +10,19 @@ import androidx.compose.ui.unit.dp
 
 
 data class MatchBean(
-    val id : Int,
-    val title_A : String,
-    val win : String,
-    val Score_Equipe1: String,
-    val Score_Equipe2: String,
-    val logo : String,
+    var id:Long? = null,
+    var date: Long? = null,
+    var equipe1: String = "Equipe 1",
+    var equipe2: String? = "Equipe 2",
+    var score_equipe: Int? = 0,
+    var score_equipe2: Int? = 0,
+    var status: Boolean = false)
 
-)
 
 const val Score_Equipe1 = ""
 const val Score_Equipe2 = ""
 val matchList = arrayListOf(
-    MatchBean(1, " PSG ", " V D V D V ", Score_Equipe1, Score_Equipe2, "Logo"),
-    MatchBean(2, " HBLM "," D D D D D ", Score_Equipe1, Score_Equipe2, "Logo2")
+    MatchBean(null, 541544848, "Nantes", "Avignon", 12, 35),
+    MatchBean( null,541544848,"PSG","HBLM", 15, 22)
 )
 

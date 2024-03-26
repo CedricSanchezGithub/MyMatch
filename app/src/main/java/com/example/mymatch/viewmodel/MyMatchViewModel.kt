@@ -4,17 +4,13 @@ package com.example.mymatch.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.mymatch.beans.AllMatchBean
 import com.example.mymatch.beans.MatchBean
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.mymatch.beans.matchList
 
 
-class MainViewModel : ViewModel() {
+class MyMatchViewModel : ViewModel() {
 
     val searchText = mutableStateOf("")
-    val myList = mutableStateListOf<AllMatchBean>()
     val runInProgress = mutableStateOf(false)
     val errorMessage = mutableStateOf("")
 
@@ -26,7 +22,11 @@ class MainViewModel : ViewModel() {
     }
 
     fun loadData() {//Simulation de chargement de donnée
-        myList.clear()
+        myList2.clear()
+        myList2.addAll(matchList)
+
+
+
 
         //Une tache en cours
         runInProgress.value = true

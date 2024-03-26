@@ -4,14 +4,13 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.content.MediaType.Companion.Text
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -44,14 +42,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
 import com.example.mymatch.R
-import com.example.mymatch.beans.AllMatchBean
-import com.example.mymatch.beans.allMatchList
+import com.example.mymatch.beans.MatchBean
+import com.example.mymatch.beans.matchList
 import com.example.mymatch.ui.theme.MyMatchTheme
-import com.example.mymatch.viewmodel.MainViewModel
-import com.google.ai.client.generativeai.type.content
+import com.example.mymatch.viewmodel.MyMatchViewModel
 
 
 //Code affiché dans la Preview, thème claire, thème sombre
@@ -61,17 +56,18 @@ import com.google.ai.client.generativeai.type.content
 fun AllMatchScreenPreview() {
     MyMatchTheme {
         Surface() {
-            val mainViewModel: MainViewModel = viewModel()
-            mainViewModel.myList.addAll(allMatchList)
-            AllMatchScreen(mainViewModel = mainViewModel)
+            val myMatchViewModel: MyMatchViewModel = viewModel()
+            myMatchViewModel.myList2.addAll(matchList)
+            AllMatchScreen(myMatchViewModel = myMatchViewModel)
         }
     }
 }
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AllMatchScreen(
     navHostController: NavHostController? = null,
-    mainViewModel: MainViewModel
+    myMatchViewModel: MyMatchViewModel
 ) {
     //Couleur à retirer lors de l'utilisation des thèmes de couleur
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
@@ -109,11 +105,16 @@ fun AllMatchScreen(
             modifier = Modifier.weight(1f)
         ) {
             val filterList =
-                mainViewModel.myList //.filter { it.title.contains(mainViewModel.searchText.value, ignoreCase = true) }
+                myMatchViewModel.myList2 //.filter { it.title.contains(mainViewModel.searchText.value, ignoreCase = true) }
 
             items(filterList.size) {
                 PictureRowItem(data = filterList[it],
                     onPictureClick = {
+                        navHostController?.navigate(
+                            Routes.MatchDetailScreen.withObject(
+                                filterList[it]
+                            )
+                        )
                     })
             }
         }
@@ -124,7 +125,7 @@ fun AllMatchScreen(
         ) {
             Row {
                 Button(
-                    onClick = { mainViewModel.searchText.value = "" },
+                    onClick = { myMatchViewModel.searchText.value = "" },
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                 ) {
                     Icon(
@@ -139,7 +140,7 @@ fun AllMatchScreen(
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
 
                 Button(
-                    onClick = { mainViewModel.loadData() },
+                    onClick = { myMatchViewModel.loadData() },
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                 ) {
                     Icon(
@@ -158,12 +159,19 @@ fun AllMatchScreen(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun PictureRowItem(modifier: Modifier = Modifier, data: AllMatchBean, onPictureClick: () -> Unit) {
+fun PictureRowItem(
+    modifier: Modifier = Modifier,
+    data: MatchBean,
+    onPictureClick: () -> Unit,
+) {
 
     Row(
         modifier = modifier
             .height(110.dp)
             .background(Color.White)
+            .clickable(onClick = onPictureClick)
+
+
     ) {
 
 
@@ -175,7 +183,7 @@ fun PictureRowItem(modifier: Modifier = Modifier, data: AllMatchBean, onPictureC
 
             // Titre
             Text(
-                text = data.title,
+                text = data.title_A,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = Color.Black,
@@ -196,15 +204,16 @@ fun PictureRowItem(modifier: Modifier = Modifier, data: AllMatchBean, onPictureC
                 Spacer(modifier = Modifier.width(15.dp)) // Espace entre le logo et le texte
                 Text(
                     text = buildAnnotatedString {
-                        append(data.Equipe_A)
+                        append(data.title_A)
                         withStyle(style = SpanStyle(color = Color.Red)) {
-                            append("${data.Score_EquipeA} ")
+                            append("${data.Score_Equipe1} ")
                         }
 
                     },
                     fontSize = 20.sp,
                     color = Color.Blue,
                     modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
+
                 )
 
 
@@ -214,9 +223,9 @@ fun PictureRowItem(modifier: Modifier = Modifier, data: AllMatchBean, onPictureC
                 Text(
                     text = buildAnnotatedString {
                         withStyle(style = SpanStyle(color = Color.Red)) {
-                            append("${data.Score_EquipeB} ")
+                            append("${data.Score_Equipe2} ")
                         }
-                        append(data.Equipe_B)
+                        append(data.title_A)
                     },
                     fontSize = 20.sp,
                     color = Color.Blue,

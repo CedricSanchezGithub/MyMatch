@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mymatch.R
 import com.example.mymatch.beans.MatchBean
-import com.example.mymatch.ui.theme.md_theme_light_primaryContainer
 
 
 @Composable

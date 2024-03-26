@@ -1,4 +1,4 @@
-package com.example.mymatch.screens
+package com.example.mymatch
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mymatch.beans.MatchBean
+import com.example.mymatch.screens.AllMatchScreen
+import com.example.mymatch.screens.MatchDetailScreen
 import com.example.mymatch.viewmodel.MyMatchViewModel
 
 sealed class Routes(val route: String) {

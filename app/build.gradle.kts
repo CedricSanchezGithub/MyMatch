@@ -71,5 +71,19 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.+")
     implementation("androidx.navigation:navigation-compose:2.4.0")
 
+    //Requete
+    implementation("com.squareup.okhttp3:okhttp:+")
+    //Parsing JSON
+    implementation("com.google.code.gson:gson:+")
+    //Téléchargement d'image
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.+")
+    //Utilisation générale
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:+")
+    //LifeCycleScope
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.+")
+    //ViewModelScope
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.+")
 
 }

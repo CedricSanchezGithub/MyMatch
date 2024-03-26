@@ -39,29 +39,13 @@ fun teamB(data : MatchBean) {
             modifier = Modifier.fillMaxWidth().padding(start = 10.dp)
         // Centrage horizontal du contenu
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.hblm), // Remplacez R.drawable.logo_equipe_a par la ressource correspondant au logo de l'équipe A
-                contentDescription = "Logo équipe B",
-                modifier = Modifier.size(80.dp) // Taille du logo
-            )
             Spacer(modifier = Modifier.width(10.dp)) // Espace entre le haut de la colonne et la première rangée
-
             Text(
                 text = data.title_A,
                 fontSize = 30.sp,
                 color = Color.Black,
                 modifier = Modifier.weight(1f)
             )
-
-            Text(
-                text = data.win,
-                textAlign = TextAlign.End,
-                fontSize = 20.sp,
-                color = Color.Black,
-                modifier = Modifier.weight(1f)
-            )
-
-
         }
         Spacer(modifier = Modifier.height(15.dp)) // Espace entre le haut de la colonne et la première rangée
 

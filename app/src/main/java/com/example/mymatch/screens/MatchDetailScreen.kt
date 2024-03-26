@@ -38,7 +38,6 @@ import com.example.mymatch.viewmodel.MyMatchViewModel
 fun MatchDetailPreview() {
     MyMatchTheme {
         Surface {
-
             val myMatchViewModel: MyMatchViewModel = viewModel()
             myMatchViewModel.myList2.addAll(matchList)
             Column(

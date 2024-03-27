@@ -23,7 +23,7 @@ object MatchAPI {
     val client = OkHttpClient()
     private const val URL_SERVER = "http://2.9.163.31:8080"
 
-    fun createMatch(equipe1 : String, equipe2 : String = "equipe2", date: Long) {
+    fun createMatch(equipe1 : String, equipe2 : String, date: Long) {
 
         val res = sendPost("$URL_SERVER/creatematch", MatchBean(null, date, equipe1, equipe2))
 

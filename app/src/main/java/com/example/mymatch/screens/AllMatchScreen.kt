@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -70,6 +71,7 @@ fun AllMatchScreen(
     myMatchViewModel: MyMatchViewModel
 ) {
 
+
     //Couleur à retirer lors de l'utilisation des thèmes de couleur
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
         Row(
@@ -102,25 +104,26 @@ fun AllMatchScreen(
 
         Spacer(modifier = Modifier.height(16.dp)) // Ajoute un espace de 16dp entre le titre et la colonne
 
+
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.weight(1f)
-        ) {
-            val filterList =
-                myMatchViewModel.myList2 //.filter { it.title.contains(mainViewModel.searchText.value, ignoreCase = true) }
-
-            items(filterList.size) {
-                PictureRowItem(data = filterList[it],
+        )
+        {
+            items(myMatchViewModel.myList2.size) { index ->
+                val match = myMatchViewModel.myList2[index]
+                PictureRowItem(data = match,
                     onPictureClick = {
                         navHostController?.navigate(
                             Routes.MatchDetailScreen.withObject(
-                                filterList[it]
+                                match
                             )
                         )
                     })
             }
-        }
 
+        }
+        // Boutons
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -143,27 +146,26 @@ fun AllMatchScreen(
                 }
 
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                var equipe1 by remember { mutableStateOf("") }
-                var equipe2 by remember { mutableStateOf("") }
-                val dialogShown = remember { mutableStateOf(false) }
 
-                if (dialogShown.value) {
+
+                if (myMatchViewModel.dialogShown.value) {
                     AlertDialog(
                         onDismissRequest = {
-                            dialogShown.value = false
+                            myMatchViewModel.dialogShown.value = false
                         },
                         title = { Text(text = "Créer un match") },
                         text = {
                             Column {
-                                OutlinedTextField(
-                                    value = equipe1,
-                                    onValueChange = { equipe1 = it },
+                                TextField(
+
+                                    value = myMatchViewModel.equipe1.value,
+                                    onValueChange = { myMatchViewModel.equipe1.value = it },
                                     label = { Text("Nom de l'équipe 1") }
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
-                                OutlinedTextField(
-                                    value = equipe2,
-                                    onValueChange = { equipe2 = it },
+                                TextField(
+                                    value = myMatchViewModel.equipe2.value,
+                                    onValueChange = { myMatchViewModel.equipe2.value = it },
                                     label = { Text("Nom de l'équipe 2") }
                                 )
                             }
@@ -171,10 +173,16 @@ fun AllMatchScreen(
                         confirmButton = {
                             Button(
                                 onClick = {
-                                    myMatchViewModel.createMatch(equipe1, equipe2)
-                                    dialogShown.value = false
-                                    equipe1 = equipe1
-                                    equipe2 = equipe2
+                                    println("click test creer")
+                                    println(myMatchViewModel.equipe1.value)
+                                    println(myMatchViewModel.equipe2.value)
+                                    myMatchViewModel.createMatch(
+                                        myMatchViewModel.equipe1.value,
+                                        myMatchViewModel.equipe2.value
+                                    )
+                                    myMatchViewModel.dialogShown.value = false
+                                   // myMatchViewModel.equipe1 = equipe1
+                                //equipe2 = equipe2
                                 }
                             ) {
                                 // Créer le match
@@ -184,7 +192,7 @@ fun AllMatchScreen(
                         dismissButton = {
                             Button(
                                 // Fermer boite de dialogue
-                                onClick = { dialogShown.value = false }
+                                onClick = { myMatchViewModel.dialogShown.value = false }
                             ) {
                                 Text("Annuler")
                             }
@@ -192,20 +200,7 @@ fun AllMatchScreen(
                     )
                 }
 
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.weight(1f)
-                )
-                {
-                    items(myMatchViewModel.myList2.size) { index ->
-                        val match = myMatchViewModel.myList2[index]
-                        PictureRowItem(data = match) {
 
-
-                        }
-                    }
-
-                }
 
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -215,7 +210,7 @@ fun AllMatchScreen(
                         // ...
 
                         Button(
-                            onClick = { dialogShown.value = true },
+                            onClick = { myMatchViewModel.dialogShown.value = true },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             Icon(

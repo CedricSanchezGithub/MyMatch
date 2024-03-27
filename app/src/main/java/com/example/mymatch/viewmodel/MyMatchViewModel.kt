@@ -2,9 +2,12 @@ package com.example.mymatch.viewmodel
 
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mymatch.beans.MatchBean
@@ -16,7 +19,14 @@ import java.io.IOException
 
 
 class MyMatchViewModel : ViewModel() {
-    var match2 = mutableStateOf(MatchBean(equipe1 = "equipe1", equipe2 = "equipe2"))
+
+    var equipe1 = mutableStateOf("")
+    var equipe2 =  mutableStateOf("")
+    val dialogShown =   mutableStateOf(false)
+
+
+    var match2 = mutableStateOf(MatchBean(equipe1 = "", equipe2 = ""))
+
     val myList2 = mutableStateListOf(
         MatchBean(
             id = 1,
@@ -36,7 +46,10 @@ class MyMatchViewModel : ViewModel() {
             score_equipe2 = 0,
             status = false
         ),
+        // Ajoutez d'autres matches si nécessaire
     )
+
+
     val buttonValue = mutableIntStateOf(0)
     fun loadList() {
         myList2.clear()
@@ -49,28 +62,25 @@ class MyMatchViewModel : ViewModel() {
                     println("Load list")
                 }
             } catch (e: IOException) {
-                println("catch")
                 e.printStackTrace()
             }
         }
     }
 
-    fun createMatch(team1: String, team2: String): MutableState<MatchBean> {
+    fun createMatch(team1: String, team2: String) {
         val date = System.currentTimeMillis()
         viewModelScope.launch(Dispatchers.Default) {
             try {
+                println("viewmodel creer")
                 MatchAPI.createMatch(equipe1 = team1, equipe2 = team2, date = date)
-                match2 = mutableStateOf(MatchBean(equipe1 = team1, equipe2 = team2))
+                val newMatch = MatchBean(equipe1 = team1, equipe2 = team2, date = date)
                 launch(Dispatchers.Main) {
+                    // myList2.add(newMatch)
                 }
             } catch (e: IOException) {
-                println("catch")
                 e.printStackTrace()
             }
         }
-        loadList()
-        return match2
-
     }
 
     fun addScore(id: Long, equipe: Int): MutableState<MatchBean> {

@@ -86,7 +86,7 @@ class MyMatchViewModel : ViewModel() {
     fun addScore(id: Long, equipe: Int): MutableState<MatchBean> {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                match2 = MatchAPI.add1Point(id, equipe)
+                // match2 = MatchAPI.add1Point(id, equipe)
                 launch(Dispatchers.Main)
                 {
 

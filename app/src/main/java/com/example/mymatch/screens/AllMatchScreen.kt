@@ -17,12 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,14 +38,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.example.mymatch.R
@@ -65,6 +58,7 @@ import com.example.mymatch.viewmodel.MyMatchViewModel
 fun AllMatchScreenPreview() {
     MyMatchTheme {
         Surface() {
+
         }
     }
 }
@@ -134,7 +128,8 @@ fun AllMatchScreen(
             Row {
                 Button(
                     onClick = {
-                        //myMatchViewModel.searchText.value = ""
+                        myMatchViewModel.loadList()
+                        println("click list")
                     },
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                 ) {
@@ -148,8 +143,8 @@ fun AllMatchScreen(
                 }
 
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                var equipe1Name by remember { mutableStateOf("") }
-                var equipe2Name by remember { mutableStateOf("") }
+                var equipe1 by remember { mutableStateOf("") }
+                var equipe2 by remember { mutableStateOf("") }
                 val dialogShown = remember { mutableStateOf(false) }
 
                 if (dialogShown.value) {
@@ -161,14 +156,14 @@ fun AllMatchScreen(
                         text = {
                             Column {
                                 OutlinedTextField(
-                                    value = equipe1Name,
-                                    onValueChange = { equipe1Name = it },
+                                    value = equipe1,
+                                    onValueChange = { equipe1 = it },
                                     label = { Text("Nom de l'équipe 1") }
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 OutlinedTextField(
-                                    value = equipe2Name,
-                                    onValueChange = { equipe2Name = it },
+                                    value = equipe2,
+                                    onValueChange = { equipe2 = it },
                                     label = { Text("Nom de l'équipe 2") }
                                 )
                             }
@@ -176,10 +171,10 @@ fun AllMatchScreen(
                         confirmButton = {
                             Button(
                                 onClick = {
-                                    myMatchViewModel.createMatch(equipe1Name, equipe2Name)
+                                    myMatchViewModel.createMatch(equipe1, equipe2)
                                     dialogShown.value = false
-                                    equipe1Name = ""
-                                    equipe2Name = ""
+                                    equipe1 = equipe1
+                                    equipe2 = equipe2
                                 }
                             ) {
                                 // Créer le match
@@ -263,7 +258,7 @@ fun PictureRowItem(
 
             // Titre
             Text(
-                text = "data.title_A",
+                text = data.date.toString(),
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = Color.Black,

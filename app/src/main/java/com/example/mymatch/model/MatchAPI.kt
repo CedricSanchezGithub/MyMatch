@@ -1,9 +1,7 @@
 package com.example.mymatch.model
 
 import com.example.mymatch.beans.MatchBean
-import com.example.mymatch.model.MatchAPI.client
 import com.example.mymatch.model.MatchAPI.createMatch
-import com.example.mymatch.model.MatchAPI.gson
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -14,7 +12,10 @@ fun main() {
 
     createMatch("MHB","Nantes",51984651)
 
+
+
 }
+
 object MatchAPI {
 
     val MEDIA_TYPE_JSON = "application/json; charset=utf-8".toMediaType()
@@ -27,6 +28,15 @@ object MatchAPI {
         val res = sendPost("$URL_SERVER/creatematch", MatchBean(null, date, equipe1, equipe2))
 
         println(res)
+
+    }
+
+
+    fun load7DayzMatch(): List<MatchBean> {
+        var json = sendGet("$URL_SERVER/mymatch/7Dayz")
+        val test = gson.fromJson(json, Array<MatchBean>::class.java).toList()
+        println(test)
+        return test
 
     }
 
@@ -56,5 +66,7 @@ object MatchAPI {
                 it.body.string()
             }
         }
+
+
 
     }

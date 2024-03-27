@@ -17,8 +17,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -62,7 +65,6 @@ import com.example.mymatch.viewmodel.MyMatchViewModel
 fun AllMatchScreenPreview() {
     MyMatchTheme {
         Surface() {
-
         }
     }
 }
@@ -131,11 +133,13 @@ fun AllMatchScreen(
         ) {
             Row {
                 Button(
-                    onClick = { myMatchViewModel.searchText.value = "" },
+                    onClick = {
+                        //myMatchViewModel.searchText.value = ""
+                    },
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                 ) {
                     Icon(
-                        Icons.Filled.Clear,
+                        Icons.Filled.Refresh,
                         contentDescription = "Localized description",
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
@@ -172,21 +176,40 @@ fun AllMatchScreen(
                         confirmButton = {
                             Button(
                                 onClick = {
-                                    myMatchViewModel.createMatch(equipe1, equipe2)
+                                    myMatchViewModel.createMatch(equipe1Name, equipe2Name)
                                     dialogShown.value = false
+                                    equipe1Name = ""
+                                    equipe2Name = ""
                                 }
                             ) {
+                                // Créer le match
                                 Text("Créer")
                             }
                         },
                         dismissButton = {
                             Button(
+                                // Fermer boite de dialogue
                                 onClick = { dialogShown.value = false }
                             ) {
                                 Text("Annuler")
                             }
                         }
                     )
+                }
+
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.weight(1f)
+                )
+                {
+                    items(myMatchViewModel.myList2.size) { index ->
+                        val match = myMatchViewModel.myList2[index]
+                        PictureRowItem(data = match) {
+
+
+                        }
+                    }
+
                 }
 
                 Box(
@@ -201,7 +224,7 @@ fun AllMatchScreen(
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             Icon(
-                                Icons.Filled.Send,
+                                Icons.Filled.Add,
                                 contentDescription = "Localized description",
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
@@ -211,10 +234,9 @@ fun AllMatchScreen(
                     }
                 }
             }
-            }
         }
     }
-
+}
 
 
 @OptIn(ExperimentalGlideComposeApi::class)

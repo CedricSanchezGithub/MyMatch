@@ -27,10 +27,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mymatch.viewmodel.MyMatchViewModel
 
 
 @Composable
-fun versus() {
+fun versus(myMatchViewModel: MyMatchViewModel) {
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.primary)) {
         Spacer(modifier = Modifier.height(15.dp)) // Espace entre le haut de la colonne et la première rangée
 
@@ -46,7 +47,13 @@ fun versus() {
                     .background(Color.White)
                     .border(width = 1.dp, color = Color.Black)
                     .padding(end = 10.dp)
-            )
+            ) {
+                Text(
+                    text = myMatchViewModel.myList2[0].score_equipe1.toString() ,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
 
             // Texte "VS"
             Text(
@@ -65,7 +72,14 @@ fun versus() {
                     .background(Color.White)
                     .border(width = 1.dp, color = Color.Black)
                     .padding(start = 10.dp)
-            )
+
+            ){
+                Text(
+                    text = myMatchViewModel.myList2[0].score_equipe2.toString() ,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
         }
 
 
@@ -74,7 +88,9 @@ fun versus() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = { },
+                onClick = {
+                    myMatchViewModel.myList2[0].id?.let { myMatchViewModel.addScore(it,1) }
+                },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 modifier = Modifier.padding(start = 69.dp)
             )
@@ -92,7 +108,9 @@ fun versus() {
             Spacer(modifier = Modifier.width(80.dp))
 
             Button(
-                onClick = { },
+                onClick = {
+                    myMatchViewModel.myList2[0].id?.let { myMatchViewModel.addScore(it,2) }
+                },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 modifier = Modifier.padding(start = 42.dp)
             )

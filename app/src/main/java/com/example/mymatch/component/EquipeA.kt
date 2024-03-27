@@ -23,10 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mymatch.R
 import com.example.mymatch.beans.MatchBean
+import com.example.mymatch.viewmodel.MyMatchViewModel
 
 
 @Composable
-fun teamA(data : MatchBean){
+fun teamA(myMatchViewModel: MyMatchViewModel){
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.tertiary ).border(width = 1.dp, color = Color.Black)
     ) {
 
@@ -38,14 +39,14 @@ fun teamA(data : MatchBean){
         ) {
             Spacer(modifier = Modifier.width(15.dp)) // Espace entre le haut de la colonne et la première rangée
             Text(
-                text = data.equipe1,
+                text = myMatchViewModel.myList2[0].equipe1,
                 fontSize = 30.sp,
                 color = Color.Black,
                 modifier = Modifier.weight(1f)
             )
 
             Text(
-                text = data.equipe2,
+                text = myMatchViewModel.myList2[0].equipe2,
                 textAlign = TextAlign.End,
                 fontSize = 30.sp,
                 color = Color.Black,

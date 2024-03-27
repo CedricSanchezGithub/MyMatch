@@ -33,7 +33,7 @@ class MyMatchViewModel : ViewModel() {
             date = System.currentTimeMillis(), // Utilisation de l'heure actuelle comme date
             equipe1 = "Real Madrid",
             equipe2 = "Barcelona",
-            score_equipe = 2,
+            score_equipe1 = 2,
             score_equipe2 = 1,
             status = true
         ),
@@ -42,7 +42,7 @@ class MyMatchViewModel : ViewModel() {
             date = System.currentTimeMillis(), // Utilisation de l'heure actuelle comme date
             equipe1 = "Manchester United",
             equipe2 = "Liverpool",
-            score_equipe = 0,
+            score_equipe1 = 0,
             score_equipe2 = 0,
             status = false
         ),
@@ -68,7 +68,7 @@ class MyMatchViewModel : ViewModel() {
     }
 
     fun createMatch(team1: String, team2: String) {
-        val date = System.currentTimeMillis()
+        val date = System .currentTimeMillis()
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 println("viewmodel creer")
@@ -86,7 +86,7 @@ class MyMatchViewModel : ViewModel() {
     fun addScore(id: Long, equipe: Int): MutableState<MatchBean> {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                // match2 = MatchAPI.add1Point(id, equipe)
+                match2 = MatchAPI.add1Point(id, equipe)
                 launch(Dispatchers.Main)
                 {
 

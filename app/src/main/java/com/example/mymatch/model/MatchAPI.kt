@@ -7,10 +7,11 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 
 fun main() {
 
-    createMatch("MHB","Nantes",51984651)
+    createMatch("PSG","Lyon",51984651)
 
 
 
@@ -25,7 +26,7 @@ object MatchAPI {
 
     fun createMatch(equipe1 : String, equipe2 : String, date: Long) {
 
-        val res = sendPost("$URL_SERVER/creatematch", MatchBean(null, date, equipe1, equipe2))
+        val res = sendPost("$URL_SERVER/mymatch/creatematch", MatchBean(null, date, equipe1, equipe2))
 
         println(res)
 
@@ -33,7 +34,7 @@ object MatchAPI {
 
 
     fun load7DayzMatch(): List<MatchBean> {
-        var json = sendGet("$URL_SERVER/mymatch/7Dayz")
+        var json = sendGet("$URL_SERVER/mymatch/7dayz")
         val test = gson.fromJson(json, Array<MatchBean>::class.java).toList()
         println(test)
         return test
@@ -51,22 +52,20 @@ object MatchAPI {
             it.body.string()
         }
     }
-        fun sendPost(url: String, toSend: Any?): String {
-            println("url : $url")
+    fun sendPost(url: String, toSend: Any?): String {
+        println("url : $url")
 
-            val json = gson.toJson(toSend)
+        val json = gson.toJson(toSend)
 
-            val body = json.toRequestBody(MEDIA_TYPE_JSON)
-            val request = Request.Builder().url(url).post(body).build()
+        val body = json.toRequestBody(MEDIA_TYPE_JSON)
+        val request = Request.Builder().url(url).post(body).build()
 
-            return client.newCall(request).execute().use {
-                if (!it.isSuccessful) {
-                    throw Exception("Réponse du serveur incorrect :${it.code}")
-                }
-                it.body.string()
+        return client.newCall(request).execute().use {
+            if (!it.isSuccessful) {
+                throw Exception("Réponse du serveur incorrect :${it.code}")
             }
+            it.body.string()
         }
-
-
+    }
 
     }

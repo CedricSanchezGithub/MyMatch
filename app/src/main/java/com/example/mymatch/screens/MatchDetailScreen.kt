@@ -77,9 +77,9 @@ fun MatchDetailScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(25.dp)) // Ajout d'un espace vertical entre les équipes A et B
-                teamA(data = matchList[0])
+                teamA(myMatchViewModel = myMatchViewModel)
                 Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
-                versus()
+                versus(myMatchViewModel = myMatchViewModel)
                 Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
 
             }

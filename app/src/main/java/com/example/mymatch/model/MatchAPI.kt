@@ -4,6 +4,7 @@ import com.example.mymatch.beans.MatchBean
 import com.example.mymatch.model.MatchAPI.add1Point
 import com.example.mymatch.model.MatchAPI.createMatch
 import com.example.mymatch.model.MatchAPI.load7DayzMatch
+import com.example.mymatch.viewmodel.MyMatchViewModel
 import com.google.gson.Gson
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
@@ -13,7 +14,11 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
-
+fun main() {
+    println(MatchAPI.load7DayzMatch())
+    MatchAPI.finishMatch(28)
+    println(MatchAPI.load7DayzMatch())
+}
 object MatchAPI {
 
     val MEDIA_TYPE_JSON = "application/json; charset=utf-8".toMediaType()
@@ -31,7 +36,9 @@ object MatchAPI {
         val responseJson = sendPostaddPoint("$URL_SERVER/mymatch/score", idMatch, equipe)
         return gson.fromJson(responseJson, MatchBean::class.java)
     }
-
+    fun finishMatch(idMatch: Long){
+        sendPost("$URL_SERVER/mymatch/statusover",idMatch)
+    }
     fun load7DayzMatch(): List<MatchBean> {
         var json = sendGet("$URL_SERVER/mymatch/7dayz")
         val test = gson.fromJson(json, Array<MatchBean>::class.java).toList()

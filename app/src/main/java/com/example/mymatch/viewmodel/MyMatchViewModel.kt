@@ -96,9 +96,7 @@ class MyMatchViewModel : ViewModel() {
     fun addScore(id: Long, equipe: Int): MutableState<MatchBean> {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-
                val newData = mutableStateOf( MatchAPI.add1Point(id, equipe))
-
                 launch(Dispatchers.Main)
                 {
                     match2 = newData
@@ -110,8 +108,14 @@ class MyMatchViewModel : ViewModel() {
         }
         return match2
     }
-
-
-
-
+    fun changeStatus(idMatch:Long){
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                MatchAPI.finishMatch(idMatch)
+            } catch (e: IOException) {
+                println("catch")
+                e.printStackTrace()
+            }
+        }
+    }
 }

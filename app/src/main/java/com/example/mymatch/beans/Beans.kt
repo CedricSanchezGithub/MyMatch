@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 
 
 data class MatchBean(
-    var id:Long? = null,
+    var id:Long? = 0,
     var date: Long? = null,
     var equipe1: String = "Equipe 1",
     var equipe2: String = "Equipe 2",
@@ -20,7 +20,7 @@ data class MatchBean(
     var status: Boolean = false)
 
 val matchList = arrayListOf(
-    MatchBean(null, 541544848, "Nantes", "Avignon", 12, 35),
-    MatchBean( null,541544848,"PSG","HBLM", 15, 22)
+    MatchBean(1, 541544848, "Nantes", "Avignon", 12, 35),
+    MatchBean( 2,541544848,"PSG","HBLM", 15, 22)
 )
 

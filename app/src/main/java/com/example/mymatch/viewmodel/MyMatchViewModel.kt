@@ -15,9 +15,11 @@ import com.example.mymatch.beans.MatchBean
 import com.example.mymatch.beans.matchList
 import com.example.mymatch.model.MatchAPI
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.sql.Date
+import java.util.Locale
 
 
 class MyMatchViewModel : ViewModel() {
@@ -28,9 +30,8 @@ class MyMatchViewModel : ViewModel() {
 
 
     fun formatDate(milliseconds: Long): String {
-        val date = Date(milliseconds)
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-
+        val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+        val date = (milliseconds)
         return dateFormat.format(date)
     }
 
@@ -78,12 +79,11 @@ class MyMatchViewModel : ViewModel() {
 
     fun createMatch(team1: String, team2: String) {
         val date = System.currentTimeMillis()
-        val formattedDate = formatDate(date) // Obtenir la date formatée
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 println("viewmodel creer")
-                MatchAPI.createMatch(equipe1 = team1, equipe2 = team2, date = formattedDate.toLong())
-                val newMatch = MatchBean(equipe1 = team1, equipe2 = team2, date = formattedDate.toLong())
+                MatchAPI.createMatch(equipe1 = team1, equipe2 = team2, date = date)
+                val newMatch = MatchBean(equipe1 = team1, equipe2 = team2, date = date)
                 launch(Dispatchers.Main) {
                     myList2.add(newMatch)
                 }
@@ -96,10 +96,12 @@ class MyMatchViewModel : ViewModel() {
     fun addScore(id: Long, equipe: Int): MutableState<MatchBean> {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-               // match2 = MatchAPI.add1Point(id, equipe)
+
+               val newData = mutableStateOf( MatchAPI.add1Point(id, equipe))
+
                 launch(Dispatchers.Main)
                 {
-
+                    match2 = newData
                 }
             } catch (e: IOException) {
                 println("catch")

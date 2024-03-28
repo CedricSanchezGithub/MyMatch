@@ -25,13 +25,12 @@ sealed class Routes(val route: String) {
         fun withObject(data: MatchBean) = "MatchDetailScreen/${data.id}"
     }
 
-    data object MatchListScreen : Routes("mexicanlistScreen")
 }
 
 @Composable
 fun AppNavigation() {
 
-    val navHostController : NavHostController = rememberNavController()
+    val navHostController: NavHostController = rememberNavController()
 
     //viewModel appartient au framework peremt de récupérer une instance déjà existante s'il en existe une
     val myMatchViewModel: MyMatchViewModel = viewModel()
@@ -48,12 +47,12 @@ fun AppNavigation() {
         //Route 2 vers un écran de détail
         composable(
             route = Routes.MatchDetailScreen.route,
-            arguments = listOf(navArgument("id") { type = NavType.IntType })
+            arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) {
-            val id = it.arguments?.getInt("id") ?: 1
-            MatchDetailScreen(navHostController, myMatchViewModel=myMatchViewModel)
+            val idNav = it.arguments?.getLong("id") ?: 10
+            MatchDetailScreen(id = idNav,navHostController,  myMatchViewModel = myMatchViewModel)
+        }
         }
 
 
     }
-}

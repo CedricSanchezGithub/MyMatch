@@ -50,6 +50,8 @@ import com.example.mymatch.Routes
 import com.example.mymatch.beans.MatchBean
 import com.example.mymatch.ui.theme.MyMatchTheme
 import com.example.mymatch.viewmodel.MyMatchViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 //Code affiché dans la Preview, thème claire, thème sombre
@@ -118,7 +120,10 @@ fun AllMatchScreen(
                             Routes.MatchDetailScreen.withObject(
                                 match
                             )
+
                         )
+                        println("testEquipe")
+
                     },
                     myMatchViewModel = myMatchViewModel
                 )
@@ -242,7 +247,7 @@ fun PictureRowItem(
     val formattedDate = myMatchViewModel.formatDate(System.currentTimeMillis())
     Text(
 
-        text = formattedDate,
+        text = "Date: ${formatDate(data.date ?: 0L)}",
         fontSize = 20.sp,
         textAlign = TextAlign.Center,
         color = Color.Black,
@@ -263,17 +268,6 @@ fun PictureRowItem(
                 .padding(8.dp)
                 .fillMaxWidth()
         ) {
-
-            // Titre
-            Text(
-                text = data.date.toString(),
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                color = Color.Black,
-                modifier = Modifier.fillMaxWidth()
-
-            )
-
             // Équipe A avec son logo et son score
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -299,6 +293,12 @@ fun PictureRowItem(
         }
 
     }
+
+}
+fun formatDate(milliseconds: Long): String {
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+    val date = (milliseconds)
+    return dateFormat.format(date)
 }
 
 

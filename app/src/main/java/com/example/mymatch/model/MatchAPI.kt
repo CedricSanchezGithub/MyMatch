@@ -13,19 +13,6 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
-fun main() {
-    //Création de la date du jour
-    val currentTimeMillis = System.currentTimeMillis()
-    //Créer un match
-    createMatch("MHB","Nantes",currentTimeMillis)
-    //lister les match
-    val listest = load7DayzMatch()
-
-    //ajouter un point
-    listest[0].id?.let { add1Point(it, 1) }
-    println(listest)
-
-}
 
 object MatchAPI {
 

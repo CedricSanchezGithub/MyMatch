@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,7 +63,7 @@ import java.util.Locale
 fun AllMatchScreenPreview() {
     MyMatchTheme {
         Surface() {
-
+            AllMatchScreen(myMatchViewModel = MyMatchViewModel())
         }
     }
 }
@@ -110,25 +112,27 @@ fun AllMatchScreen(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.weight(1f)
-        )
-        {
+        ) {
             items(myMatchViewModel.myList2.size) { index ->
                 val match = myMatchViewModel.myList2[index]
-                PictureRowItem(data = match,
+                PictureRowItem(
+                    data = match,
                     onPictureClick = {
                         navHostController?.navigate(
                             Routes.MatchDetailScreen.withObject(
                                 match
                             )
-
                         )
                         println("testEquipe")
-
                     },
                     myMatchViewModel = myMatchViewModel
                 )
-            }
 
+                // Ajouter une Divider après chaque élément, sauf le dernier
+                if (index < myMatchViewModel.myList2.size - 1) {
+                    Divider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.Gray)
+                }
+            }
         }
         // Boutons
         Box(
@@ -244,18 +248,18 @@ fun PictureRowItem(
     onPictureClick: () -> Unit,
     myMatchViewModel: MyMatchViewModel
 ) {
+    // Date
     val formattedDate = myMatchViewModel.formatDate(System.currentTimeMillis())
     Text(
-
         text = "Date: ${formatDate(data.date ?: 0L)}",
         fontSize = 20.sp,
         textAlign = TextAlign.Center,
         color = Color.Black,
         modifier = Modifier.fillMaxWidth()
-
     )
 
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .height(110.dp)
             .background(Color.White)
@@ -268,26 +272,35 @@ fun PictureRowItem(
                 .padding(8.dp)
                 .fillMaxWidth()
         ) {
-            // Équipe A avec son logo et son score
+            // Équipe A
             Row(
-                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-
-                Spacer(modifier = Modifier.width(15.dp)) // Espace entre le logo et le texte
                 Text(
                     text = data.equipe1,
                     fontSize = 20.sp,
-                    color = Color.Blue,
-                    modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
-
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(start = 5.dp) // Décalage à gauche
+                        .width(150.dp), // Largeur fixe pour le texte de l'équipe 1
                 )
-                Spacer(modifier = Modifier.width(15.dp)) // Espace entre le logo et le texte
+                Spacer(modifier = Modifier.width(8.dp)) // Espace entre le texte de l'équipe 1 et le "-"
+                Text(
+                    text = " - ",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.weight(1f)) // Espace flexible au milieu pour centrer le texte "-"
                 Text(
                     text = data.equipe2,
                     fontSize = 20.sp,
-                    color = Color.Blue,
-                    modifier = Modifier.weight(1f) // Fait en sorte que le texte prenne le reste de l'espace disponible
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(end = 5.dp) // Décalage à droite
+                        .weight(1f) // Permet au texte de prendre le reste de l'espace disponible
                 )
             }
         }
@@ -296,7 +309,7 @@ fun PictureRowItem(
 
 }
 fun formatDate(milliseconds: Long): String {
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault())
     val date = (milliseconds)
     return dateFormat.format(date)
 }

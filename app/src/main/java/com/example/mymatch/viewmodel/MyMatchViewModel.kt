@@ -41,8 +41,8 @@ class MyMatchViewModel : ViewModel() {
         MatchBean(
             id = 1,
             date = System.currentTimeMillis(), // Utilisation de l'heure actuelle comme date
-            equipe1 = "Real Madrid",
-            equipe2 = "Barcelona",
+            equipe1 = "Lyon",
+            equipe2 = "Lille",
             score_equipe1 = 2,
             score_equipe2 = 1,
             status = true

@@ -1,6 +1,7 @@
 package com.example.mymatch.viewmodel
 
 
+import android.icu.text.SimpleDateFormat
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -16,6 +17,7 @@ import com.example.mymatch.model.MatchAPI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.sql.Date
 
 
 class MyMatchViewModel : ViewModel() {
@@ -24,6 +26,13 @@ class MyMatchViewModel : ViewModel() {
     var equipe2 =  mutableStateOf("")
     val dialogShown =   mutableStateOf(false)
 
+
+    fun formatDate(milliseconds: Long): String {
+        val date = Date(milliseconds)
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+
+        return dateFormat.format(date)
+    }
 
     var match2 = mutableStateOf(MatchBean(equipe1 = "", equipe2 = ""))
 
@@ -68,12 +77,13 @@ class MyMatchViewModel : ViewModel() {
     }
 
     fun createMatch(team1: String, team2: String) {
-        val date = System .currentTimeMillis()
+        val date = System.currentTimeMillis()
+        val formattedDate = formatDate(date) // Obtenir la date formatée
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 println("viewmodel creer")
-                MatchAPI.createMatch(equipe1 = team1, equipe2 = team2, date = date)
-                val newMatch = MatchBean(equipe1 = team1, equipe2 = team2, date = date)
+                MatchAPI.createMatch(equipe1 = team1, equipe2 = team2, date = formattedDate.toLong())
+                val newMatch = MatchBean(equipe1 = team1, equipe2 = team2, date = formattedDate.toLong())
                 launch(Dispatchers.Main) {
                     myList2.add(newMatch)
                 }

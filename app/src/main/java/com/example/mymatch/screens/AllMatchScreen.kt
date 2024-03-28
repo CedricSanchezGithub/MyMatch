@@ -119,7 +119,9 @@ fun AllMatchScreen(
                                 match
                             )
                         )
-                    })
+                    },
+                    myMatchViewModel = myMatchViewModel
+                )
             }
 
         }
@@ -235,7 +237,18 @@ fun PictureRowItem(
     modifier: Modifier = Modifier,
     data: MatchBean,
     onPictureClick: () -> Unit,
+    myMatchViewModel: MyMatchViewModel
 ) {
+    val formattedDate = myMatchViewModel.formatDate(System.currentTimeMillis())
+    Text(
+
+        text = formattedDate,
+        fontSize = 20.sp,
+        textAlign = TextAlign.Center,
+        color = Color.Black,
+        modifier = Modifier.fillMaxWidth()
+
+    )
 
     Row(
         modifier = modifier

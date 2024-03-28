@@ -56,7 +56,7 @@ class MyMatchViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val newData = MatchAPI.load7DayzMatch()
-                // myList2.addAll(newData)
+                myList2.addAll(newData)
                 launch(Dispatchers.Main) {
                     myList2.addAll(newData)
                     println("Load list")
@@ -75,7 +75,7 @@ class MyMatchViewModel : ViewModel() {
                 MatchAPI.createMatch(equipe1 = team1, equipe2 = team2, date = date)
                 val newMatch = MatchBean(equipe1 = team1, equipe2 = team2, date = date)
                 launch(Dispatchers.Main) {
-                    // myList2.add(newMatch)
+                    myList2.add(newMatch)
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -86,7 +86,7 @@ class MyMatchViewModel : ViewModel() {
     fun addScore(id: Long, equipe: Int): MutableState<MatchBean> {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                // match2 = MatchAPI.add1Point(id, equipe)
+               // match2 = MatchAPI.add1Point(id, equipe)
                 launch(Dispatchers.Main)
                 {
 
@@ -98,6 +98,8 @@ class MyMatchViewModel : ViewModel() {
         }
         return match2
     }
+
+
 
 
 }

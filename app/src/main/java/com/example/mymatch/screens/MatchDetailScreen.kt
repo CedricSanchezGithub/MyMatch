@@ -2,6 +2,7 @@ package com.example.mymatch.screens
 
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -27,15 +29,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.Role.Companion.Button
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.mymatch.beans.matchList
 
 import com.example.mymatch.ui.theme.MyMatchTheme
 import com.example.mymatch.viewmodel.MyMatchViewModel
@@ -48,12 +50,10 @@ import com.example.mymatch.viewmodel.MyMatchViewModel
 fun MatchDetailPreview() {
     MyMatchTheme {
         Surface {
-            MatchDetailScreen(10,myMatchViewModel = MyMatchViewModel())
+            MatchDetailScreen(10, myMatchViewModel = MyMatchViewModel())
         }
     }
 }
-
-
 
 
 @Composable
@@ -63,16 +63,18 @@ fun MatchDetailScreen(
     myMatchViewModel: MyMatchViewModel
 ) {
 
-    val idNav = myMatchViewModel.myList2.find { it.id == id }
-    println("Test pour Anthony + ${idNav} ")
+    val match = myMatchViewModel.myList2.find { it.id == id }
+
+
 
     Column(
         modifier = Modifier
             // Couleur de fond
-            .background(Color(0xFFECEFF1)) // Utilisation d'une couleur de fond légèrement grisée
+            .background(MaterialTheme.colorScheme.primary) // Utilisation d'une couleur de fond légèrement grisée
             // Taille complète
             .fillMaxSize()
     ) {
+
 
         Spacer(modifier = Modifier.height(16.dp))
         Row(
@@ -86,18 +88,52 @@ fun MatchDetailScreen(
                 color = Color.Black,
                 modifier = Modifier.fillMaxWidth()
             )
+
         }
+
         Spacer(modifier = Modifier.height(25.dp)) // Ajout d'un espace vertical entre les équipes A et B
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+
+        ) {
+
+            AnimatedVisibility(visible = match?.status == true) {
+                Text(
+                    text = "Match en cours !",
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp,
+                    fontFamily = FontFamily.Monospace,
+                    color = MaterialTheme.colorScheme.onError
+                )
+            }
+
+            AnimatedVisibility(visible = match?.status == false) {
+                Text(
+                    text = "Match terminé !",
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp,
+                    fontFamily = FontFamily.Monospace,
+                    color = MaterialTheme.colorScheme.onError
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(25.dp)) // Ajout d'un espace vertical entre les équipes A et B
+
 
         // Equipes
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(start = 10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.tertiaryContainer)
         ) {
             Spacer(modifier = Modifier.width(15.dp))
-            if (idNav != null) {
+            if (match != null) {
                 Text(
-                    text = idNav.equipe1,
+                    text = match.equipe1,
+                    textAlign = TextAlign.Center,
                     fontSize = 30.sp,
                     color = Color.Black,
                     modifier = Modifier.weight(1f)
@@ -105,10 +141,10 @@ fun MatchDetailScreen(
                 println("Test equipe 1 ")
             }
 
-            if (idNav != null) {
+            if (match != null) {
                 Text(
-                    text = idNav.equipe2,
-                    textAlign = TextAlign.End,
+                    text = match.equipe2,
+                    textAlign = TextAlign.Center,
                     fontSize = 30.sp,
                     color = Color.Black,
                     modifier = Modifier.weight(1f)
@@ -116,13 +152,10 @@ fun MatchDetailScreen(
                 println("Test equipe 2 ")
             }
         }
-
-        Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
-
+        Spacer(modifier = Modifier.height(35.dp)) // Ajout d'un espace vertical entre les équipes A et B
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
         ) {
             // Case gauche
             Box(
@@ -130,18 +163,15 @@ fun MatchDetailScreen(
                     .size(50.dp)
                     .background(Color.White)
                     .border(width = 1.dp, color = Color.Black)
-                    .padding(end = 10.dp)
+
             ) {
-                if (idNav != null) {
+                if (match != null) {
                     Text(
-                        text = idNav.score_equipe1.toString(),
+                        text = match.score_equipe1.toString(),
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
             }
-
-
-
             // Texte "VS"
             Text(
                 text = "VS",
@@ -151,25 +181,23 @@ fun MatchDetailScreen(
                 color = Color.Black,
                 modifier = Modifier.padding(horizontal = 50.dp) // Ajout de marges horizontales autour du texte
             )
-
-
             // Case droite
             Box(
                 modifier = Modifier
                     .size(50.dp)
                     .background(Color.White)
                     .border(width = 1.dp, color = Color.Black)
-                    .padding(start = 10.dp)
+
             ) {
-                if (idNav != null) {
+                if (match != null) {
                     Text(
-                        text = idNav.score_equipe2.toString(),
+                        text = match.score_equipe2.toString(),
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(35.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -177,12 +205,14 @@ fun MatchDetailScreen(
             // Bouton +1 Equipe 1
             Button(
                 onClick = {
-                    if (idNav != null) {
-                        idNav.id?.let { myMatchViewModel.addScore(it, 1) }
+                    if (match != null) {
+                        match.id?.let { myMatchViewModel.addScore(it, 1) }
+                        match.id?.let { myMatchViewModel.loadList() }
                     }
                 },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                modifier = Modifier.padding(start = 69.dp)
+                modifier = Modifier.padding(start = 69.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
             ) {
                 Icon(
                     Icons.Filled.Add,
@@ -201,12 +231,14 @@ fun MatchDetailScreen(
             // Bouton +1 Equipe 2
             Button(
                 onClick = {
-                    if (idNav != null) {
-                        idNav.id?.let { myMatchViewModel.addScore(it, 2) }
+                    if (match != null) {
+                        match.id?.let { myMatchViewModel.addScore(it, 2) }
+                        match.id?.let { myMatchViewModel.loadList() }
                     }
                 },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                modifier = Modifier.padding(start = 42.dp)
+                modifier = Modifier.padding(start = 42.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
             ) {
                 Icon(
                     Icons.Filled.Add,
@@ -221,6 +253,7 @@ fun MatchDetailScreen(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(25.dp)) // Ajout d'un espace vertical entre les équipes A et B
 
         // Bouton match terminé
         Row(
@@ -229,14 +262,21 @@ fun MatchDetailScreen(
             horizontalArrangement = Arrangement.Center // Centrage horizontal du bouton
         ) {
             Button(
+
                 onClick = {
+                    if (match != null) {
+                        println(match.status)
+                        match.id?.let { myMatchViewModel.changeStatus(it) }
+                        println(match.status)
+                    }
 
                 },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
             ) {
                 Icon(
-                    Icons.Filled.Add,
+                    Icons.Filled.Clear,
                     contentDescription = "Localized description",
                     modifier = Modifier.size(ButtonDefaults.IconSize),
                     tint = Color.White // Couleur de l'icône blanche
@@ -247,8 +287,48 @@ fun MatchDetailScreen(
                     color = Color.White // Couleur du texte blanche
                 )
             }
+
+
+
+
         }
 
-        Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical entre les équipes A et B
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+           horizontalArrangement = Arrangement.Center ) {
+            if (match != null) {
+                val scoreEquipe1 = match.score_equipe1 ?: 0 // Si score_equipe1 est null, utiliser 0
+                val scoreEquipe2 = match.score_equipe2 ?: 0 // Si score_equipe2 est null, utiliser 0
+
+                val difference = scoreEquipe1 - scoreEquipe2
+                val seuilDomination = 5 // Choisir un seuil approprié pour la différence de score
+                if (difference >= seuilDomination) {
+                    Text(
+                        text = "Domination de l'équipe 1", // Adapter le message en fonction de l'équipe qui domine
+                        textAlign = TextAlign.Center,
+                        color = Color.Blue,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                } else if (difference <= -seuilDomination) {
+                    Text(
+                        text = "Domination de l'équipe 2", // Adapter le message en fonction de l'équipe qui domine
+                        textAlign = TextAlign.Center,
+                        color = Color.Red,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+        }
+
+
+
+
+
+
     }
 }
+

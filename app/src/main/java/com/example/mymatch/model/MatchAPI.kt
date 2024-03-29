@@ -32,7 +32,7 @@ object MatchAPI {
 
     }
 
-    fun add1Point(idMatch: Long, equipe: Int): MatchBean {
+    fun add1Point(idMatch: Long, equipe: Int): MatchBean? {
         val responseJson = sendPostaddPoint("$URL_SERVER/mymatch/score", idMatch, equipe)
         return gson.fromJson(responseJson, MatchBean::class.java)
     }

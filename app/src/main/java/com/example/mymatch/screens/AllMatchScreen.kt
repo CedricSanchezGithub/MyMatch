@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -77,7 +78,9 @@ fun AllMatchScreen(
 
 
     //Couleur à retirer lors de l'utilisation des thèmes de couleur
-    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.primary)) {
+        Spacer(modifier = Modifier.height(25.dp)) // Espace en haut de l'écran
+
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -86,27 +89,27 @@ fun AllMatchScreen(
 
             // Image à gauche de l'écran
             Image(
-                painter = painterResource(id = R.drawable.coupe),
+                painter = painterResource(id = R.drawable.logo1),
                 contentDescription = "Logo équipe A",
                 modifier = Modifier
-                    .width(100.dp) // Largeur souhaitée
+                    .width(50.dp) // Largeur souhaitée
                     .aspectRatio(1f) // Conserver le ratio hauteur/largeur
                     .scale(2f, 2f) // Pas de mise à l'échelle en hauteur, échelle de 1 en hauteur
             )
 
-            Spacer(modifier = Modifier.width(5.dp))
 
             // Texte centré horizontalement
             Text(
-                text = " - My Match",
+                text = "My Match",
                 fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                color = Color.Black,
+                color = Color.White,
                 modifier = Modifier.weight(1f) // Le texte prendra tout l'espace disponible
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp)) // Ajoute un espace de 16dp entre le titre et la colonne
+        Spacer(modifier = Modifier.height(35.dp)) // Ajoute un espace de 16dp entre le titre et la colonne
 
 
         LazyColumn(
@@ -130,7 +133,7 @@ fun AllMatchScreen(
 
                 // Ajouter une Divider après chaque élément, sauf le dernier
                 if (index < myMatchViewModel.myList2.size - 1) {
-                    Divider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.Gray)
+                    Divider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.Black)
                 }
             }
         }
@@ -149,7 +152,8 @@ fun AllMatchScreen(
                         println("click list")
                     },
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                    modifier = Modifier.padding(end = 16.dp) // Espacement à droite
+                    modifier = Modifier.padding(end = 16.dp), // Espacement à droite
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary) // Couleur de fond du premier bouton
                 ) {
                     Icon(
                         Icons.Filled.Refresh,
@@ -162,7 +166,10 @@ fun AllMatchScreen(
                 Button(
                     onClick = { myMatchViewModel.dialogShown.value = true },
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                    modifier = Modifier.padding(start = 16.dp) // Espacement à gauche
+                    modifier = Modifier.padding(start = 16.dp), // Espacement à gauche
+                    colors = ButtonDefaults . buttonColors (MaterialTheme.colorScheme.secondary) // Couleur de fond du premier bouton
+
+
                 ) {
                     Icon(
                         Icons.Filled.Add,
@@ -207,8 +214,8 @@ fun AllMatchScreen(
                                         myMatchViewModel.equipe2.value
                                     )
                                     myMatchViewModel.dialogShown.value = false
-                                   // myMatchViewModel.equipe1 = equipe1
-                                //equipe2 = equipe2
+                                    // myMatchViewModel.equipe1 = equipe1
+                                    //equipe2 = equipe2
                                 }
                             ) {
                                 // Créer le match
@@ -225,7 +232,6 @@ fun AllMatchScreen(
                         }
                     )
                 }
-
 
 
             }
@@ -249,14 +255,15 @@ fun PictureRowItem(
         fontSize = 20.sp,
         textAlign = TextAlign.Center,
         color = Color.Black,
+
         modifier = Modifier.fillMaxWidth()
     )
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .height(110.dp)
-            .background(Color.White)
+            .height(70.dp)
+            .background(MaterialTheme.colorScheme.tertiaryContainer)
             .clickable(onClick = onPictureClick)
     ) {
 
@@ -304,6 +311,7 @@ fun PictureRowItem(
     }
 
 }
+
 fun formatDate(milliseconds: Long): String {
     val dateFormat = SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault())
     val date = (milliseconds)

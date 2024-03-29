@@ -25,9 +25,8 @@ import java.util.Locale
 class MyMatchViewModel : ViewModel() {
 
     var equipe1 = mutableStateOf("")
-    var equipe2 =  mutableStateOf("")
-    val dialogShown =   mutableStateOf(false)
-
+    var equipe2 = mutableStateOf("")
+    val dialogShown = mutableStateOf(false)
 
     fun formatDate(milliseconds: Long): String {
         val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
@@ -37,36 +36,14 @@ class MyMatchViewModel : ViewModel() {
 
     var match2 = mutableStateOf(MatchBean(equipe1 = "", equipe2 = ""))
 
-    val myList2 = mutableStateListOf(
-        MatchBean(
-            id = 1,
-            date = System.currentTimeMillis(), // Utilisation de l'heure actuelle comme date
-            equipe1 = "Lyon",
-            equipe2 = "Lille",
-            score_equipe1 = 2,
-            score_equipe2 = 1,
-            status = true
-        ),
-        MatchBean(
-            id = 2,
-            date = System.currentTimeMillis(), // Utilisation de l'heure actuelle comme date
-            equipe1 = "Manchester United",
-            equipe2 = "Liverpool",
-            score_equipe1 = 0,
-            score_equipe2 = 0,
-            status = false
-        ),
-        // Ajoutez d'autres matches si nécessaire
-    )
+    val myList2 = mutableStateListOf<MatchBean>()
 
-
-    val buttonValue = mutableIntStateOf(0)
     fun loadList() {
         myList2.clear()
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val newData = MatchAPI.load7DayzMatch()
-                myList2.addAll(newData)
+                // myList2.addAll(newData)
                 launch(Dispatchers.Main) {
                     myList2.addAll(newData)
                     println("Load list")
@@ -96,10 +73,12 @@ class MyMatchViewModel : ViewModel() {
     fun addScore(id: Long, equipe: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-               val newData =MatchAPI.add1Point(id, equipe)
+                val newData = MatchAPI.add1Point(id, equipe)
                 launch(Dispatchers.Main)
                 {
-                    match2.value = newData
+                    if (newData != null) {
+                        match2.value = newData
+                    }
                 }
             } catch (e: IOException) {
                 println("catch")
@@ -107,10 +86,13 @@ class MyMatchViewModel : ViewModel() {
             }
         }
     }
-    fun changeStatus(idMatch:Long){
+
+    fun changeStatus(idMatch: Long) {
+
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 MatchAPI.finishMatch(idMatch)
+                loadList()
             } catch (e: IOException) {
                 println("catch")
                 e.printStackTrace()

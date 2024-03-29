@@ -17,7 +17,7 @@ data class MatchBean(
     var equipe2: String = "Equipe 2",
     var score_equipe1: Int? = 0,
     var score_equipe2: Int? = 0,
-    var status: Boolean = false)
+    var status: Boolean = true)
 
 val matchList = arrayListOf(
     MatchBean(1, 541544848, "Nantes", "Avignon", 12, 35),

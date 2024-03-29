@@ -139,13 +139,17 @@ fun AllMatchScreen(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Button(
                     onClick = {
                         myMatchViewModel.loadList()
                         println("click list")
                     },
-                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                    modifier = Modifier.padding(end = 16.dp) // Espacement à droite
                 ) {
                     Icon(
                         Icons.Filled.Refresh,
@@ -153,10 +157,21 @@ fun AllMatchScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Actualiser la liste")
+                    Text("Actualiser")
                 }
-
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Button(
+                    onClick = { myMatchViewModel.dialogShown.value = true },
+                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                    modifier = Modifier.padding(start = 16.dp) // Espacement à gauche
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Localized description",
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Créer")
+                }
 
 
                 if (myMatchViewModel.dialogShown.value) {
@@ -213,27 +228,6 @@ fun AllMatchScreen(
 
 
 
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row {
-                        // ...
-
-                        Button(
-                            onClick = { myMatchViewModel.dialogShown.value = true },
-                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                        ) {
-                            Icon(
-                                Icons.Filled.Add,
-                                contentDescription = "Localized description",
-                                modifier = Modifier.size(ButtonDefaults.IconSize)
-                            )
-                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text("Créer un match")
-                        }
-                    }
-                }
             }
         }
     }
@@ -278,6 +272,7 @@ fun PictureRowItem(
             ) {
                 Text(
                     text = data.equipe1,
+                    textAlign = TextAlign.Center,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -288,19 +283,20 @@ fun PictureRowItem(
                 Spacer(modifier = Modifier.width(8.dp)) // Espace entre le texte de l'équipe 1 et le "-"
                 Text(
                     text = " - ",
-                    fontSize = 17.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.weight(1f)) // Espace flexible au milieu pour centrer le texte "-"
                 Text(
                     text = data.equipe2,
+                    textAlign = TextAlign.Center,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
                     modifier = Modifier
-                        .padding(end = 5.dp) // Décalage à droite
-                        .weight(1f) // Permet au texte de prendre le reste de l'espace disponible
+                        .padding(end = 5.dp) // Décalage à droite (ajusté à 5.dp)
+                        .width(150.dp) // Permet au texte de prendre le reste de l'espace disponible
                 )
             }
         }

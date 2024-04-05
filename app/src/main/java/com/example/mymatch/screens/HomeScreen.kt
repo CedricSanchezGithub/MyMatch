@@ -95,7 +95,11 @@ fun HomeScreen(navController: NavController? = null) {
                     .clickable { navController?.navigate("AllMatchScreen") },
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
             ) {
-                Text("Voir tous les matchs")
+                Text(
+                    text = "Voir tous les matchs",
+                    color = Color.Black,
+                    fontSize = 18.sp
+                )
             }
         }
 

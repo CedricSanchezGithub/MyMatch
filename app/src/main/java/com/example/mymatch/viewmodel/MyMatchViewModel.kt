@@ -1,24 +1,17 @@
 package com.example.mymatch.viewmodel
 
 
-import android.icu.text.SimpleDateFormat
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mymatch.beans.MatchBean
-import com.example.mymatch.beans.matchList
 import com.example.mymatch.model.MatchAPI
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.sql.Date
 import java.util.Locale
 
 
@@ -27,6 +20,17 @@ class MyMatchViewModel : ViewModel() {
     var equipe1 = mutableStateOf("")
     var equipe2 = mutableStateOf("")
     val dialogShown = mutableStateOf(false)
+
+    private val _errorText = mutableStateOf("")
+    val errorText: State<String> = _errorText
+
+    private val _errorTextColor = mutableStateOf(Color.Black) // Par défaut, la couleur du texte est noire
+    val errorTextColor: State<Color> = _errorTextColor
+
+    fun setErrorText(text: String) {
+        _errorText.value = text
+        _errorTextColor.value = Color.Black
+    }
 
     fun formatDate(milliseconds: Long): String {
         val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
@@ -37,6 +41,18 @@ class MyMatchViewModel : ViewModel() {
     var match2 = mutableStateOf(MatchBean(equipe1 = "", equipe2 = ""))
 
     val myList2 = mutableStateListOf<MatchBean>()
+
+    fun deleteMatchVM(id : Long){
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                MatchAPI.deleteMatch(id)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            loadList()
+        }
+    }
+
 
     fun loadList() {
         myList2.clear()

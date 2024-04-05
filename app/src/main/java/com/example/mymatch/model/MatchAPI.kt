@@ -12,12 +12,12 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import java.io.IOException
 
 fun main() {
-    println(MatchAPI.load7DayzMatch())
-    MatchAPI.finishMatch(28)
-    println(MatchAPI.load7DayzMatch())
+
+
 }
 object MatchAPI {
 
@@ -46,6 +46,9 @@ object MatchAPI {
         return test
 
     }
+
+    fun deleteMatch(id: Long) = sendDelete("$URL_SERVER/mymatch/deletematch/${id}")
+
 
     fun sendPostaddPoint(url: String, idMatch: Long, equipe: Int): String {
         println("URL : $url")
@@ -94,6 +97,21 @@ object MatchAPI {
                 throw Exception("Réponse du serveur incorrect :${it.code}")
             }
             it.body.string()
+        }
+    }
+
+    fun sendDelete(url: String): String? {
+        println("url : $url")
+        val client = OkHttpClient()
+
+        val request = Request.Builder().url(url).delete().build()
+
+        try {
+            val response: Response = client.newCall(request).execute()
+            return response.body?.string() ?: "Empty response"
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return "Error: ${e.message}"
         }
     }
 

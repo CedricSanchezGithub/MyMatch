@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -89,6 +88,8 @@ fun MatchDetailScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
+
+
         }
 
         Spacer(modifier = Modifier.height(25.dp)) // Ajout d'un espace vertical entre les équipes A et B
@@ -104,7 +105,7 @@ fun MatchDetailScreen(
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp,
                     fontFamily = FontFamily.Monospace,
-                    color = MaterialTheme.colorScheme.onError
+                    color = Color.Black
                 )
             }
 
@@ -114,7 +115,7 @@ fun MatchDetailScreen(
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp,
                     fontFamily = FontFamily.Monospace,
-                    color = MaterialTheme.colorScheme.onError
+                    color = Color.Black
                 )
             }
         }
@@ -134,7 +135,7 @@ fun MatchDetailScreen(
                 Text(
                     text = match.equipe1,
                     textAlign = TextAlign.Center,
-                    fontSize = 30.sp,
+                    fontSize = 27.sp,
                     color = Color.Black,
                     modifier = Modifier.weight(1f)
                 )
@@ -145,7 +146,7 @@ fun MatchDetailScreen(
                 Text(
                     text = match.equipe2,
                     textAlign = TextAlign.Center,
-                    fontSize = 30.sp,
+                    fontSize = 27.sp,
                     color = Color.Black,
                     modifier = Modifier.weight(1f)
                 )
@@ -156,6 +157,7 @@ fun MatchDetailScreen(
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // Case gauche
             Box(
@@ -205,9 +207,11 @@ fun MatchDetailScreen(
             // Bouton +1 Equipe 1
             Button(
                 onClick = {
-                    if (match != null) {
+                    if (match != null && match.status) {
                         match.id?.let { myMatchViewModel.addScore(it, 1) }
                         match.id?.let { myMatchViewModel.loadList() }
+                    } else{
+                        myMatchViewModel.setErrorText("Erreur ! Le match est terminé !")
                     }
                 },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
@@ -218,12 +222,12 @@ fun MatchDetailScreen(
                     Icons.Filled.Add,
                     contentDescription = "Localized description",
                     modifier = Modifier.size(ButtonDefaults.IconSize),
-                    tint = Color.White // Couleur de l'icône blanche
+                    tint = Color.Black // Couleur de l'icône blanche
                 )
                 Text(
                     text = "1",
                     fontSize = 20.sp, // Augmentation de la taille du texte à 20sp
-                    color = Color.White // Couleur du texte blanche
+                    color = Color.Black // Couleur du texte noire
                 )
             }
             Spacer(modifier = Modifier.width(80.dp))
@@ -231,9 +235,12 @@ fun MatchDetailScreen(
             // Bouton +1 Equipe 2
             Button(
                 onClick = {
-                    if (match != null) {
+                    if (match != null && match.status) {
                         match.id?.let { myMatchViewModel.addScore(it, 2) }
                         match.id?.let { myMatchViewModel.loadList() }
+                    }
+                    else{
+                        myMatchViewModel.setErrorText("Erreur ! Le match est terminé !")
                     }
                 },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
@@ -244,12 +251,12 @@ fun MatchDetailScreen(
                     Icons.Filled.Add,
                     contentDescription = "Localized description",
                     modifier = Modifier.size(ButtonDefaults.IconSize),
-                    tint = Color.White // Couleur de l'icône blanche
+                    tint = Color.Black // Couleur de l'icône noir
                 )
                 Text(
                     text = "1",
                     fontSize = 20.sp, // Augmentation de la taille du texte à 20sp
-                    color = Color.White // Couleur du texte blanche
+                    color = Color.Black // Couleur du texte noir
                 )
             }
         }
@@ -279,12 +286,12 @@ fun MatchDetailScreen(
                     Icons.Filled.Clear,
                     contentDescription = "Localized description",
                     modifier = Modifier.size(ButtonDefaults.IconSize),
-                    tint = Color.White // Couleur de l'icône blanche
+                    tint = Color.Black // Couleur de l'icône blanche
                 )
                 Text(
                     text = "Match Terminé",
                     fontSize = 20.sp, // Augmentation de la taille du texte à 20sp
-                    color = Color.White // Couleur du texte blanche
+                    color = Color.Black // Couleur du texte blanche
                 )
             }
 
@@ -306,7 +313,7 @@ fun MatchDetailScreen(
                     Text(
                         text = "Domination de l'équipe 1", // Adapter le message en fonction de l'équipe qui domine
                         textAlign = TextAlign.Center,
-                        color = Color.Blue,
+                        color = Color.Black,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(start = 8.dp)
@@ -315,7 +322,7 @@ fun MatchDetailScreen(
                     Text(
                         text = "Domination de l'équipe 2", // Adapter le message en fonction de l'équipe qui domine
                         textAlign = TextAlign.Center,
-                        color = Color.Red,
+                        color = Color.Black,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(start = 8.dp)
@@ -332,3 +339,8 @@ fun MatchDetailScreen(
     }
 }
 
+
+@Composable
+fun errorTextMatch(myMatchViewModel: MyMatchViewModel) : String {
+    return myMatchViewModel.errorText.value
+}

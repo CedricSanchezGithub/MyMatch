@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -104,7 +105,7 @@ fun AllMatchScreen(
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = Color.Black,
                 modifier = Modifier.weight(1f) // Le texte prendra tout l'espace disponible
             )
         }
@@ -158,10 +159,14 @@ fun AllMatchScreen(
                     Icon(
                         Icons.Filled.Refresh,
                         contentDescription = "Localized description",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                        tint = Color.Black
+
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Actualiser")
+                    Text(
+                        text = "Actualiser",
+                        color = Color.Black)
                 }
                 Button(
                     onClick = { myMatchViewModel.dialogShown.value = true },
@@ -174,11 +179,15 @@ fun AllMatchScreen(
                     Icon(
                         Icons.Filled.Add,
                         contentDescription = "Localized description",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                        modifier = Modifier.width(45.dp),
+                        tint = Color.Black
                     )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Créer")
+                    Text(
+                        text = "Créer",
+                        color = Color.Black,)
                 }
+
+
 
 
                 if (myMatchViewModel.dialogShown.value) {
@@ -235,7 +244,10 @@ fun AllMatchScreen(
 
 
             }
+
         }
+        Spacer(modifier = Modifier.height(25.dp)) // Ajoute un espace de 16dp entre le titre et la colonne
+
     }
 }
 
@@ -248,16 +260,33 @@ fun PictureRowItem(
     onPictureClick: () -> Unit,
     myMatchViewModel: MyMatchViewModel
 ) {
+    Row {
+
     // Date
-    val formattedDate = myMatchViewModel.formatDate(System.currentTimeMillis())
     Text(
         text = "Date: ${formatDate(data.date ?: 0L)}",
         fontSize = 20.sp,
         textAlign = TextAlign.Center,
         color = Color.Black,
+        modifier = Modifier.weight(1f)
 
-        modifier = Modifier.fillMaxWidth()
     )
+        Spacer(modifier = Modifier.width(16.dp)) // Espace pour séparer la date de l'icône
+
+        Icon(
+            Icons.Filled.Delete,
+            contentDescription = "Localized description",
+            modifier = Modifier
+                .size(32.dp)
+                .clickable(
+                    onClick = { data.id?.let { myMatchViewModel.deleteMatchVM(it) } }
+                ), // Ajoutez ici le comportement de clic
+            tint = Color.Black
+        )
+
+    }
+
+    Spacer(modifier = Modifier.height(15.dp)) // Ajoute un espace de 16dp entre le titre et la colonne
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
